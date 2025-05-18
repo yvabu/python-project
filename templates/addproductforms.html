@@ -1,0 +1,22 @@
+{%extends "base.html"%}
+{%block index %}
+
+
+ <div class="container text-center border border-5  border-light-subtle bg-body mt-3 shadow-lg">
+     <div class="alert alert-danger">
+          {%for value,erors in forms.errors.items()%}
+         {%for eror in erors%}
+            {{eror}}
+         {%endfor%}
+     {%endfor%}
+     </div>
+    <form method="post" enctype="multipart/form-data">
+        {{forms.hidden_tag()}}
+        {{forms.name(class="form-control mt-3",placeholder=forms.name.label.text)}}
+        {{forms.price(class="form-control mt-3",placeholder=forms.price.label.text)}}
+        {{forms.img(class="form-control mt-3",placeholder=forms.img.label.text)}}
+        {{forms.submit(class="btn btn-success mt-3")}}
+    </form>
+
+ </div>
+{%endblock%}

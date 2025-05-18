@@ -1,0 +1,38 @@
+{%extends "base.html"%}
+{%block index%}
+ <section class="container mt-4">
+
+         <div class="row bg-body shadow-lg">
+             <h1>ძიების შედეგია:</h1>
+              <hr>
+             {%for prd in product%}
+             <div class="col mt-2 bg-body shadow-lg ">
+                 <div class="card  border border-body rounded shadow-lg" style="width: 18rem;">
+  <img src="{{'prd.img'}}" class="card-img-top" alt="...">
+  <div class="card-body">
+
+      <h5 class="card-title">{{prd.price}}<i class="fa-solid fa-lari-sign"></i></h5>
+
+      <p class="card-text">{{prd.name}}</p>
+
+      <a href="/products/{{prd.id}}" class="btn btn-primary">Buy</a>
+      <hr>
+
+      <li class="list-group-item mt-3">
+           <a href="/edit_product/{{prd.id}}" class="btn btn-primary">რედაქტირება</a>
+           <hr>
+      </li>
+
+       <li class="list-group-item mt-3">
+           <a href="/delete/{{prd.id}}" class="btn btn-danger">წაშლა</a>
+
+      </li>
+
+  </div>
+</div>
+             </div>
+             {%endfor%}
+         </div>
+
+     </section>
+{%endblock%}
