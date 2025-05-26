@@ -23,9 +23,14 @@ class Registration(FlaskForm):
     birthday= DateField("შეიყვანეთ დაბადების თარიღი",validators=[DataRequired()])
     country=SelectField("მონიშნეთ ქვეყანა: ",choices=["საქართველო","გერმანია","სომხეთი","აზერბაიჯანი","ჩინეთი","თურქეთი","ესპანეთი"],validators=[DataRequired()])
     submit=SubmitField("რეგისტრაცია")
+
+class New_Password(FlaskForm):
+      username=StringField("ჩაწერეთ მომხმარებლის სახელი",validators=[DataRequired()])
+      new_password=PasswordField("შეიყვანეთ ახალი პაროლი",validators=[DataRequired(),length(min=8,max=32,message="პაროლი უნდა შეიცავდეს მინიმუმ 8 სიმბოლოს")])
+      submit = SubmitField("დადასტურება")
 class Loginform(FlaskForm):
     username=StringField("ჩაწერეთ მომხმარებლის სახელი",validators=[DataRequired()])
     password=PasswordField("შეიყვანეთ პაროლი",validators=[
                                                      DataRequired(),
-                                                     length(min=8,max=32)])
+                                                     length(min=8,max=32,message="პაროლი არასწორია")])
     submit=SubmitField("ავტორიზაცია")

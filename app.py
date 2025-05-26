@@ -1,5 +1,5 @@
 from extentions import app
 if __name__=="__main__":
-    from routs import *  # fifqit routshi arsebul yvela gverds vaimportebt
+    from routs import *
     app.run(debug=True)
 

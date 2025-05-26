@@ -1,9 +1,13 @@
+import os
+
 from itertools import product
 from flask_login import login_user,logout_user,login_required,current_user
+from werkzeug.security import generate_password_hash
+
 from extentions import  app,db
-from flask import render_template, redirect
+from flask import render_template, redirect, url_for, flash
 from os import path
-from forms import AddProductforms,Registration,Loginform
+from forms import AddProductforms,Registration,Loginform,New_Password
 from models import Product,User
 
 
@@ -11,6 +15,22 @@ from models import Product,User
 
 
 
+@app.route("/new_password",methods=["POST","GET"])
+def new_password():
+    if current_user.is_authenticated:
+        if current_user.role !="admin":
+            return  redirect("/")
+    new=New_Password()
+    if new.validate_on_submit():
+        user = User.query.filter_by(username=new.username.data).first()
+        if user:
+            user.password =generate_password_hash(new.new_password.data)
+            db.session.commit()
+            return redirect("/login")
+        else:
+            new.username.errors.append("მომხმარებელი არ მოიძებნა")
+
+    return render_template("new_password.html",new=new)
 
 @app.route("/login",methods=["POST","GET"])
 def login():
@@ -19,14 +39,15 @@ def login():
           return redirect("/")
 
     form=Loginform()
+    regi = Registration()
     if form.validate_on_submit():
         user=User.query.filter(User.username==form.username.data).first()
         if user and user.check_password(form.password.data):
             login_user(user)
             return redirect("/")
-        else:
-            return redirect("registration")
-    return render_template("login.html",form=form,)
+        print(form.errors)
+
+    return render_template("login.html",form=form,regist=regi)
 
 
 @app.route("/logout")
@@ -69,13 +90,12 @@ def addProductforms():
         new_product=Product(name=form.name.data,price=form.price.data,img=form.img.data.filename)
         db.session.add(new_product)
         db.session.commit()
-
-        file_dir=path.join(app.root_path,"static",form.img.data.filename)
-        form.img.data.save=(file_dir)
+        file_dir=os.path.join(app.config,"static",form.img.data.filename)
+        form.img.data.save(file_dir)
 
         return redirect("/")
     print(form.errors)
-    return render_template("addproductforms.html",forms=form)
+    return render_template("addproductforms.html",forms=form,)
 
 
 
@@ -103,7 +123,7 @@ def edit(index):
 
 
         file_dir = path.join(app.root_path, "static", form.img.data.filename)
-        form.img.data.save = (file_dir)
+        form.img.data.save(file_dir)
         return redirect("/")
     print(form.errors)
     return  render_template("editfile.html",forms=form)
@@ -113,10 +133,15 @@ def edit(index):
 def reg():
     regi=Registration()
     if regi.validate_on_submit():
-        user = User(username=regi.username.data, password=regi.password.data)
-        db.session.add(user)
-        db.session.commit()
-        return redirect("/login")
+        existing_user = User.query.filter_by(username=regi.username.data).first()
+        if existing_user:
+            regi.username.errors.append("ასეთი სახელით მომხმარებელი უკვე რეგისტრირებულია")
+        else:
+
+             user = User(username=regi.username.data, password=regi.password.data)
+             db.session.add(user)
+             db.session.commit()
+             return redirect("/login")
     print(regi.errors)
     return render_template("registration_forms.html",regist=regi)
 
