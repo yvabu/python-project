@@ -1,5 +1,4 @@
 import os
-
 from itertools import product
 from flask_login import login_user,logout_user,login_required,current_user
 from werkzeug.security import generate_password_hash
@@ -9,7 +8,6 @@ from flask import render_template, redirect, url_for, flash
 from os import path
 from forms import AddProductforms,Registration,Loginform,New_Password
 from models import Product,User
-
 
 
 
