@@ -1,8 +1,5 @@
-import os
-from itertools import product
 from flask_login import login_user,logout_user,login_required,current_user
 from werkzeug.security import generate_password_hash
-
 from extentions import  app,db
 from flask import render_template, redirect, url_for, flash
 from os import path
@@ -88,7 +85,7 @@ def addProductforms():
         new_product=Product(name=form.name.data,price=form.price.data,img=form.img.data.filename)
         db.session.add(new_product)
         db.session.commit()
-        file_dir=os.path.join(app.config,"static",form.img.data.filename)
+        file_dir=path.join(app.root_path,"static",form.img.data.filename)
         form.img.data.save(file_dir)
 
         return redirect("/")

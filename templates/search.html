@@ -6,9 +6,9 @@
              <h1>ძიების შედეგია:</h1>
               <hr>
              {%for prd in product%}
-             <div class="col mt-2 bg-body shadow-lg ">
-                 <div class="card  border border-body rounded shadow-lg" style="width: 18rem;">
-  <img src="{{'prd.img'}}" class="card-img-top" alt="...">
+             <div class="col mt-2 bg-body ">
+                 <div class="card mt-2 " style="width: 15rem;">
+   <img src="{{url_for('static', filename=prd.img)}}" class="card-img-top" alt="image" style="width: 230px;height: 200px">
   <div class="card-body">
 
       <h5 class="card-title">{{prd.price}}<i class="fa-solid fa-lari-sign"></i></h5>
